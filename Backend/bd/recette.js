@@ -1,5 +1,5 @@
 
-// R�cup�ration de la base de donn�es "SAE"
+// Récupération de la base de données "SAE"
 db = db.getSiblingDB("SaeDB");
 
 // Nettoyage des collections
