@@ -2,6 +2,7 @@
 // R�cup�ration de la base de donn�es "SAE"
 db = db.getSiblingDB("SaeDB");
 
+
 // Nettoyage des collections
 db.recette.drop();
 
