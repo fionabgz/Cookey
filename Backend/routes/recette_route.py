@@ -12,17 +12,25 @@ recette_bp = Blueprint('recette', __name__)
 
 #test route
 @recette_bp.route('/h')
-def hello_world():
-	return 'Hefdslldo, f!!'
-
-@recette_bp.route('/<string:recette_nom>',methods=['GET'])
-def get_recette(recette_nom):
-	return db.recette.find_one({"nom": recette_nom},{"_id":0,"nom":1,"instruction":1})
+def welcome():
+	return 'hello welcome in recipe!!'
 
 @recette_bp.route('all',methods=['GET'])
 def get_all_recette():
 	recette = list(db.recette.find({},{"_id":0,"nom":1}))
 	return jsonify(recette), 200
+
+@recette_bp.route('/all/time', methods=['GET'])
+def get_recettes_time():
+    recettes = list(db.recette.find({}).sort("temps", 1))
+    if recettes:
+        return jsonify(recettes), 200
+    else:
+        return jsonify({'message': 'Aucune recette trouvée'}), 404
+
+@recette_bp.route('/<string:recette_nom>',methods=['GET'])
+def get_recette(recette_nom):
+	return db.recette.find_one({"nom": recette_nom},{"_id":0,"nom":1,"instruction":1})
 
 
 @recette_bp.route('nutriscore/<string:nutriscore>',methods=['GET'])
@@ -83,7 +91,6 @@ def afficher_recettes_possibles():
     except Exception as e:
         print(f"error: {e}")
         return jsonify({'message': 'error  request'}), 500
-#gerer erreur 
 
 
 

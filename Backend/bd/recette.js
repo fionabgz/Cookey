@@ -1,9 +1,5 @@
 
-// Récupération de la base de données "SAE"
 db = db.getSiblingDB("SaeDB");
-
-
-// Nettoyage des collections
 db.recette.drop();
 
 
@@ -26,7 +22,7 @@ db.recette.insertMany([
 	{"nom":"emmental râpé","nb":100,"unite":"g"},
 	],"instruction": "   1.Lavez les courgettes, les carottes, le céleri et les champignons. Taillez les légumes en brunoise. Faites revenir l’oignon et l’ail dans le beurre. Ajoutez la viande hachée et le concentré de tomates puis laissez mijoter. Ajoutez la brunoise de légumes et laissez-les mijoter Épluchez les tomates et coupez-les en morceaux. Ajoutez-les aux légumes et à la viande hachée. Ajoutez le laurier. Salez et poivrez. Laissez la sauce mijoter pendant 30 min. à feu doux 3.Faites cuire les spaghettis. Servez la sauce dans un bol. Égouttez les spaghettis. Faites fondre une noisette de beurre dans la poêle dans laquelle vous avez préparé la sauce et ajoutez les spaghettis. Remuez 4.Servez les spaghettis avec la sauce et terminez par du persil et de l’emmental ou du gruyère."},
 	
-	{"_id":2,"nom":"quiche suisse aux oignons","temps":45,"nutriscore":"C","nbPersonne":3,"ingredients":
+	{"_id":2,"nom":"quiche suisse aux oignons","temps":40,"nutriscore":"C","nbPersonne":3,"ingredients":
 	[
 	{"nom":"oeufs","nb":3},
 	{"nom":"gruyère râpé","nb":200,"unite":"g"},

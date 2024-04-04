@@ -9,34 +9,13 @@ bcrypt = Bcrypt()
 personne_bp = Blueprint('personne', __name__)
 
 
-
-#test route
+#test route 
 @personne_bp.route('/h')
-def hello_world():
-	return 'Hefdslldo, f!!'
-
-
-@personne_bp.route('/<string:personne_nom>',methods=['GET'])
-def get_personne(personne_nom):
-	return db.personne.find_one({"nom": personne_nom},{"_id":0,"nom":1,"ingredient":1,"liste_course":1})
-
-
-
-@personne_bp.route('/<string:personne_nom>/ajouter',methods=['PUT'])
-def ajouter_ingredient(personne_nom):
-	data = request.get_json()
-	ingredient = data.get('ingredient')
-	db.personne.update_one({"nom":personne_nom},{"$push":{"liste_course":ingredient}})
-	return jsonify({'message': 'maj succès'})
-
-
-@personne_bp.route('/<string:personne_nom>/vider',methods=['DELETE'])
-def vider_liste_course(personne_nom):
-	db.personne.update_one({"nom":personne_nom},{"$set":{"liste_course":[]}})
-	return jsonify({'message': 'maj succès'})
+def welcome():
+	return 'hello, welcome in personne!!'
 
 @personne_bp.route('/inscription', methods=['POST'])
-def register():
+def inscription():
     data = request.get_json()
     username =data.get('username')
     password = data.get('password')
@@ -72,4 +51,52 @@ def connexion():
         return jsonify({'message': 'connecté'}), 200
     else:
         return jsonify({'message': 'incorrect'}), 401
+
+@personne_bp.route('/<string:username>/supprimer', methods=['DELETE'])
+def supprimer_compte(username):
+    user = db.personne.find_one({'username': username})
+    if user:
+        db.personne.delete_one({'username': username})
+        return jsonify({'message': 'Compte supprimé '}), 200
+    else:
+        return jsonify({'message': 'Utilisateur '}), 404
+
+
+@personne_bp.route('/<string:personne_nom>',methods=['GET'])
+def get_personne(personne_nom):
+	return db.personne.find_one({"nom": personne_nom},{"_id":0,"nom":1,"ingredient":1,"liste_course":1})
+
+
+@personne_bp.route('/<string:username>/ajouter',methods=['PUT'])
+def ajouter_ingredient(username):
+    data = request.get_json()
+    ingredient = data.get('ingredient')
+    result = db.personne.update_one({"username":username},{"$push":{"liste_course":ingredient}})
+    
+    if result.modified_count > 0:
+        return jsonify({'message': 'maj réussie'}), 200
+    else:
+        return jsonify({'message': 'maj échouée'}), 400
+
+@personne_bp.route('/<string:username>/vider', methods=['DELETE'])
+def vider_liste_course(username):
+    result = db.personne.update_one({"username": username}, {"$set": {"liste_course": []}})
+    
+    if result.modified_count > 0:
+        return jsonify({'message': 'maj réussie'}), 200
+    else:
+        return jsonify({'message': 'maj échouée'}), 400
+
+
+@personne_bp.route('/<string:username>/retirer', methods=['PUT'])
+def retirer_ingredient(username):
+    data = request.get_json()
+    ingredient = data.get('ingredient')
+    
+    result = db.personne.update_one({"username": username}, {"$pull": {"liste_course": ingredient}})
+    
+    if result.modified_count > 0:
+        return jsonify({'message': f'Retrait de {ingredient} réussi pour {username}'}), 200
+    else:
+        return jsonify({'message': f'{ingredient} n\'a pas été trouvé dans la liste de courses de {username}'}), 404
 
