@@ -73,3 +73,44 @@ def connexion():
     else:
         return jsonify({'message': 'incorrect'}), 401
 
+
+
+@personne_bp.route('/<string:personne_nom>/frigo/ajouter',methods=['PUT'])
+def ajouter_ingredient_frigo(personne_nom):
+	data = request.get_json()
+	ingredient = data.get('ingredient')
+	db.personne.update_one({"nom":personne_nom},{"$push":{"frigo":{"ingredient":ingredient}}})
+	return jsonify({'message': 'maj succès'})
+
+ 
+
+@personne_bp.route('/<string:personne_nom>/frigo/retirer',methods=['PUT'])
+def retirer_ingredient_frigo(personne_nom):
+	data = request.get_json()
+	ingredient = data.get('ingredient')
+	print(ingredient)
+	db.personne.update_one({"nom":personne_nom},{'$pull':{"frigo":{"ingredient":ingredient}}})
+	print(afficher_frigo(personne_nom))
+	return jsonify({'message': 'maj succès'})
+
+ 
+
+ 
+
+@personne_bp.route('/<string:personne_nom>/frigo/afficher',methods=['GET'])
+
+def afficher_frigo(personne_nom):
+	personne = db.personne.find_one({"nom":personne_nom},{"_id":0, "nom":1, "frigo":1})
+	return personne['frigo']
+
+ 
+
+@personne_bp.route('/<string:personne_nom>/course/afficher',methods=['GET'])
+
+def afficher_course(personne_nom):
+	personne = db.personne.find_one({'nom':personne_nom},{'_id':0,'nom':1, 'liste_course':1})
+	return personne['liste_course']
+
+ 
+
+ 
