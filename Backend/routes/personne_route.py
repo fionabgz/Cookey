@@ -35,7 +35,7 @@ def vider_liste_course(personne_nom):
 def ajouter_ingredient_frigo(personne_nom):
 	data = request.get_json()
 	ingredient = data.get('ingredient')
-	db.personne.update_one({"nom":personne_nom},{"$push":{"frigo":ingredient}})
+	db.personne.update_one({"nom":personne_nom},{"$push":{"frigo":{"ingredient":ingredient}}})
 	return jsonify({'message': 'maj succès'})
 
  
@@ -45,7 +45,8 @@ def retirer_ingredient_frigo(personne_nom):
 	data = request.get_json()
 	ingredient = data.get('ingredient')
 	print(ingredient)
-	db.personne.update_one({"nom":personne_nom},{'$pull':{"frigo":{"ingredient":ingredient}}},{multi:true})
+	db.personne.update_one({"nom":personne_nom},{'$pull':{"frigo":{"ingredient":ingredient}}})
+	print(afficher_frigo(personne_nom))
 	return jsonify({'message': 'maj succès'})
 
  
